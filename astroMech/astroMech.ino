@@ -42,6 +42,9 @@ void setup() {
   //
   digitalWrite(STEPPERS_ENABLE_PIN, LOW);     // be sure to do this
   
+  // check
+  double zen=acos((cos((90-LATITUDE)M_PI/180)cos((90-dec)M_PI/180)+sin((90-LATITUDE)M_PI/180)sin((90-dec)M_PI/180)cos(haM_PI/180)))180/M_PI;
+  double haMin = acos((cos((zen)M_PI/180)-cos((90-LATITUDE)M_PI/180)cos((90-dec)M_PI/180))/(sin((90-LATITUDE)M_PI/180)sin((90-dec)M_PI/180))) * \steps/hour;
 }
 
 void loop() {
@@ -55,6 +58,19 @@ void loop() {
     }
     targetHa = long(newHa * stepsPerDegHa);
     targetDec = long(newDec * stepsPerDegDec);
+    
+    // check new angle:
+    ZenAng(LATITUDE, targetDec);
+    if (zen>70)
+      haMin (LATITUDE, targetDec);
+      while(abs(haMin) > abs(ha)){
+        ha = ha+//steps per time * time since pulled from stellarium; 
+        //read out ha step number to stuff
+      }
+    else{
+      break; //? something here
+    }
+    
     slewToHa(targetHa);
     slewToDec(targetDec);
     
@@ -65,6 +81,18 @@ void loop() {
   //Serial.println("Running just the X stepper");
   //runJustTheHaStepper();
 
+}
+
+float ZenAng(double Lat, double Declin, double ha){
+  float result;
+  result = =acos((cos((90-LATITUDE)M_PI/180)cos((90-dec)M_PI/180)+sin((90-LATITUDE)M_PI/180)sin((90-dec)M_PI/180)cos(haM_PI/180)))180/M_PI;
+  return result;
+}
+
+float haMin(double LAT, double Declin) {
+  float result;
+  result = acos((cos((80)M_PI/180)-cos((90-LAT)M_PI/180)cos((90-Declin)M_PI/180))/(sin((90-LAT)M_PI/180)sin((90-Declin)M_PI/180)))*180/M_PI;//this outputs in degrees
+  return result;
 }
 
 void runJustTheHaStepper() 
